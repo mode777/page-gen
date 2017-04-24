@@ -9,10 +9,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/marked": "0.0.28",
     "@types/node": "^7.0.13",
     "typescript": "^2.2.2"
   },
   "dependencies": {
-    "dot": "^1.1.1"
+    "dot": "^1.1.1",
+    "marked": "^0.3.6"
   }
 }
