@@ -5,6 +5,18 @@ import * as marked from "marked";
 
 doT.templateSettings.strip = false;
 
+let data = { anchor: "a" }
+let templ = doT.template(`
+{{## 
+    def.inject = "injected value"
+#}}
+<h1>{{=it.inject}}</h1>
+`, null, data);
+
+let html = templ(data);
+
+
+
 type template = (data: any) => string;
 
 interface Config {
