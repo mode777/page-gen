@@ -3,17 +3,18 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>undefined - alexklingenbeck.de </title>
+        <title>Article 01 - alexklingenbeck.de </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
-        <link rel="stylesheet" href="assets/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/bootstrap.css">
+        <link rel="stylesheet" href="assets/octicons.min.css">
         <link rel="stylesheet" href="assets/styles.css">
     </head>
     <body>
         <header class="navbar navbar-light navbar-toggleable-md">
             <nav class="container">
-                <button (click)="isNavbarCollapsed = !isNavbarCollapsed" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <span class="navbar-brand" href="#">
@@ -34,10 +35,46 @@
             </nav>
         </header>
 
-        <div><h1 id="article-1">Article 1</h1>
+        <div>
+
+
+
+<div class="jumbotron bg-primary">
+    <div class="container">
+        <h1 class="display-4">Article 01</h1>
+        <p class="lead" style="margin-bottom:5px;">This is a test article</p>
+         <div class="text-muted"><em>published 2017/4/28</em></div>
+    </div>
+</div>
+
+<div class="container">
+    <h1 id="article-1">Article 1</h1>
 <p>smxjd fmcvfjmv fvkmvk</p>
 <h2 id="subarticle">Subarticle</h2>
 <p>kxckld vkfmlk lkmlk kmkl ffd ld dde</p>
+
+    <div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    
+    var disqus_config = function () {
+        this.page.identifier = "TEST_01"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    
+    (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+        var d = document, s = d.createElement('script');
+        
+        s.src = 'http://alexklingenbeck.disqus.com/embed.js';  // IMPORTANT: Replace EXAMPLE with your forum shortname!
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
 </div>
 
         <footer class="bg-faded text-muted">

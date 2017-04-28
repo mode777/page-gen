@@ -7,27 +7,28 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
-        <link rel="stylesheet" href="assets/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/styles.css">
+        <link rel="stylesheet" href="/assets/bootstrap.css">
+        <link rel="stylesheet" href="/assets/octicons.min.css">
+        <link rel="stylesheet" href="/assets/styles.css">
     </head>
     <body>
         <header class="navbar navbar-light navbar-toggleable-md">
             <nav class="container">
-                <button (click)="isNavbarCollapsed = !isNavbarCollapsed" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <span class="navbar-brand" href="#">
-                    <svg width="30" height="30" class="octicon text-success" aria-hidden="true"><use xlink:href="assets/sprite.octicons.svg#gist" /></svg>
+                    <svg width="30" height="30" class="octicon text-success" aria-hidden="true"><use xlink:href="/assets/sprite.octicons.svg#gist" /></svg>
                     alexklingenbeck.de
                 </span>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                     
-                        <a class="nav-item nav-link active" href="home.html">Home</a>
+                        <a class="nav-item nav-link active" href="/home.html">Home</a>
                     
-                        <a class="nav-item nav-link " href="blog.html">Blog</a>
+                        <a class="nav-item nav-link " href="/blog.html">Blog</a>
                     
-                        <a class="nav-item nav-link " href="about.html">About</a>
+                        <a class="nav-item nav-link " href="/about.html">About</a>
                     
                     </div>
                 </div>
@@ -40,6 +41,8 @@
 
         <footer class="bg-faded text-muted">
             <div class="container">
+                
+                <hr>
                 <strong>Copyright (c) 2017 Alexander Klingenbeck</strong><br />       
             </div>
         </footer>

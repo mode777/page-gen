@@ -71,8 +71,8 @@ function main(){
 
         page.isMarkdown = page.ext.toLocaleUpperCase() == ".MD"; 
         page.template = doT.template(page.rawContent, null, page.userData);
-        page.outPath = path.join(OUT, path.relative(page.folder, CONTENT), page.name + ".html");
-        page.href = path.join(path.relative(page.folder, CONTENT), page.name + ".html");
+        page.outPath = path.join(OUT, path.relative(CONTENT, page.folder), page.name + ".html");
+        page.href = CONFIG.prefix + path.join(path.relative(CONTENT, page.folder), page.name + ".html");
 
         return page;
     }
@@ -82,7 +82,7 @@ function main(){
 
     // Build layout graph
     const LAYOUTS_BY_NAME = {};
-    LAYOUT_PAGES.forEach(x => LAYOUTS_BY_NAME[x.filename] = x);
+    LAYOUT_PAGES.forEach(x => LAYOUTS_BY_NAME[x.name] = x);
 
     LAYOUT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.layout]);
     CONTENT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.layout]);

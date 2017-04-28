@@ -1,7 +1,6 @@
 {{##
-    def.layout = "layout.html";
+    def.layout = "layout";
     def.title = "Home";
-    def.showInMenu = true;
     def.menuOrder = 1;
  #}}
 
