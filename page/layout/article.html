@@ -1,0 +1,19 @@
+{{##
+    def.layout = "layout.html";
+#}}
+
+{{
+    model = it.$page.userData;
+}}
+
+<div class="jumbotron bg-primary">
+    <div class="container">
+        <h1 class="display-4">{{=model.title}}</h1>
+        {{? model.lead }}<p class="lead">{{=model.lead}}</p>{{?}}
+         {{? model.date }}<p><em>{{=model.date}}</em> </p>{{?}}
+    </div>
+</div>
+
+<div class="container">
+    {{=it.$content}}
+</div>

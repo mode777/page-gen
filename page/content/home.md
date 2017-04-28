@@ -1,7 +1,10 @@
 {{##
-    def.layout = "layout-art.html";
+    def.layout = "layout.html";
+    def.title = "Home";
+    def.showInMenu = true;
+    def.menuOrder = 1;
  #}}
 
-# {{=it.$page.title}}
+# {{=it.$page.userData.title}}
 
 Tescontetn bla bla bla dlss f

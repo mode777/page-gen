@@ -11,6 +11,7 @@
   "devDependencies": {
     "@types/glob": "^5.0.30",
     "@types/marked": "0.0.28",
+    "@types/mkdirp": "^0.3.29",
     "@types/node": "^7.0.13",
     "@types/underscore": "^1.8.0",
     "typescript": "^2.2.2"
@@ -19,6 +20,7 @@
     "dot": "^1.1.1",
     "glob": "^7.1.1",
     "marked": "^0.3.6",
+    "mkdirp": "^0.5.1",
     "underscore": "^1.8.3"
   }
 }

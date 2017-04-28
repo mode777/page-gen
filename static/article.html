@@ -1,33 +1,45 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title></title>
+        <title>undefined - alexklingenbeck.de </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
+        <link rel="stylesheet" href="assets/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/styles.css">
     </head>
     <body>
-        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-            <div class="container">
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <header class="navbar navbar-light navbar-toggleable-md">
+            <nav class="container">
+                <button (click)="isNavbarCollapsed = !isNavbarCollapsed" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" href="#">Navbar</a>
+                <span class="navbar-brand" href="#">
+                    <svg width="30" height="30" class="octicon text-success" aria-hidden="true"><use xlink:href="assets/sprite.octicons.svg#gist" /></svg>
+                    alexklingenbeck.de
+                </span>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                    <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link" href="#">Features</a>
-                    <a class="nav-item nav-link" href="#">Pricing</a>
-                    <a class="nav-item nav-link disabled" href="#">Disabled</a>
+                    
+                        <a class="nav-item nav-link " href="home.html">Home</a>
+                    
+                        <a class="nav-item nav-link " href="blog.html">Blog</a>
+                    
+                        <a class="nav-item nav-link " href="about.html">About</a>
+                    
                     </div>
                 </div>
-            </div>
-        </nav>
-        <div class="container"><h1 id="article-1">Article 1</h1>
+            </nav>
+        </header>
+
+        <div><h1 id="article-1">Article 1</h1>
 <p>smxjd fmcvfjmv fvkmvk</p>
 <h2 id="subarticle">Subarticle</h2>
 <p>kxckld vkfmlk lkmlk kmkl ffd ld dde</p>
 </div>
+
         <footer class="bg-faded text-muted">
             <div class="container">
                 <strong>Copyright (c) 2017 Alexander Klingenbeck</strong><br />       

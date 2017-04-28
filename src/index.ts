@@ -5,19 +5,24 @@ import * as marked from "marked";
 import * as util from "util";
 import * as _ from "underscore";
 import * as glob from "glob";
+import * as mkdirp from "mkdirp";
 
 doT.templateSettings.strip = false;
 
 interface Config {
+    prefix: string;
     out: string;
     layout: string;
-    content: string
+    content: string;
+    assets: string;
 }
 
 const CONFIG_DEFAULT: Config = {
+    prefix: "/",
     out: "out",
     layout: "layout",
     content: "content",
+    assets: "assets"
 }
 
 type template = (data: any) => string;
@@ -34,31 +39,23 @@ interface Page {
     isMarkdown?: boolean;
     layout?: Page; 
     outPath?: string;
+    href?: string;
 }
 
-async function main(){
+function main(){
 
-    // Set paths
+    // set paths
     const ROOT = process.argv[2] ? path.join(process.cwd(), process.argv[2]) : process.cwd(); 
     const CONFIG = <Config>_.extend({}, CONFIG_DEFAULT, fs.existsSync(path.join(ROOT, "page.config.json")) ? JSON.parse(fs.readFileSync(path.join(ROOT, "page.config.json"), "utf8")) : {});
     const CONTENT = path.join(ROOT, CONFIG.content);
     const LAYOUT = path.join(ROOT, CONFIG.layout);
     const OUT = path.join(ROOT, CONFIG.out);
+    const ASSETS = path.join(ROOT, CONFIG.assets);
 
-    // Collect files
-    function collectFilesAsync(dir: string){
-        return new Promise<string[]>((res, rej) => {
-            glob(path.join(dir, "**/*.*"),(err, match) => {
-                if(err)
-                    rej(err);
-                else
-                    res(match);
-            });
-        });
-    }
-
-    const CONTENT_FILES = await collectFilesAsync(CONTENT); 
-    const LAYOUT_FILES = await collectFilesAsync(LAYOUT); 
+    // collect files
+    const CONTENT_FILES = glob.sync(path.join(CONTENT, "**/*.*")); 
+    const LAYOUT_FILES = glob.sync(path.join(LAYOUT, "**/*.*")); 
+    const ASSET_FILES = glob.sync(path.join(ASSETS, "**/*.*"));
 
     // Create page-templates
     function createPage(filename: string): Page {
@@ -75,6 +72,7 @@ async function main(){
         page.isMarkdown = page.ext.toLocaleUpperCase() == ".MD"; 
         page.template = doT.template(page.rawContent, null, page.userData);
         page.outPath = path.join(OUT, path.relative(page.folder, CONTENT), page.name + ".html");
+        page.href = path.join(path.relative(page.folder, CONTENT), page.name + ".html");
 
         return page;
     }
@@ -99,10 +97,34 @@ async function main(){
             return newContent;
     }
 
+    // clear output folder
+    function clearDir(inputPath: string, keepFolder = false){
+        fs.readdirSync(inputPath).forEach((fileOrFolder) => {
+        var filePath = path.join(inputPath, fileOrFolder);
+          if (fs.statSync(filePath).isFile())
+            fs.unlinkSync(filePath);
+          else
+            clearDir(filePath);
+        });
+        if(!keepFolder)
+            fs.rmdirSync(inputPath);
+    }
+    clearDir(OUT, true);    
+    
+    // copy assets
+    ASSET_FILES.forEach(inputPath => {
+        let targetPath = path.join(OUT, path.relative(ROOT, inputPath));
+        mkdirp.sync(path.dirname(targetPath));
+        fs.createReadStream(inputPath).pipe(fs.createWriteStream(targetPath));
+    });
+
+    // render pages
     for (let i = 0; i < CONTENT_PAGES.length; i++) {
+
         var page = CONTENT_PAGES[i];
+        console.log(page.path);
         const TEMPLATE_DATA = {
-            $page: page.userData,
+            $page: page,
             $layouts: LAYOUTS_BY_NAME,
             $pages: CONTENT_PAGES,
             $config: CONFIG
@@ -118,8 +140,10 @@ async function main(){
         if(page.layout)
             html = renderLayout(page.layout, TEMPLATE_DATA, html);
 
+        mkdirp.sync(path.dirname(page.outPath));
         fs.writeFileSync(page.outPath, html);
     }
+    console.log("Done");
 };
 
 main();

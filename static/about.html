@@ -1,20 +1,14 @@
-{{
-    it.menu = it.$pages
-        .filter( (p) => p.userData.showInMenu )
-        .sort( (a,b) => a.userData.menuOrder - b.userData.menuOrder );
 
-    assetPrefix = it.$config.prefix + it.$config.assets;
-}}
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{= it.$page.userData.title }} - {{= it.$config.title  }} </title>
+        <title>About - alexklingenbeck.de </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
-        <link rel="stylesheet" href="{{= assetPrefix }}/bootstrap.min.css">
-        <link rel="stylesheet" href="{{= assetPrefix }}/styles.css">
+        <link rel="stylesheet" href="assets/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/styles.css">
     </head>
     <body>
         <header class="navbar navbar-light navbar-toggleable-md">
@@ -23,28 +17,44 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <span class="navbar-brand" href="#">
-                    <svg width="30" height="30" class="octicon text-success" aria-hidden="true"><use xlink:href="{{= assetPrefix }}/sprite.octicons.svg#gist" /></svg>
-                    {{= it.$config.title }}
+                    <svg width="30" height="30" class="octicon text-success" aria-hidden="true"><use xlink:href="assets/sprite.octicons.svg#gist" /></svg>
+                    alexklingenbeck.de
                 </span>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                    {{  for(let i = 0; i < it.menu.length; i++){
-                            let menuPage = it.menu[i];
-                    }}
-                        <a class="nav-item nav-link {{? menuPage == it.$page}}active{{?}}" href="{{= it.$config.prefix + menuPage.href }}">{{= menuPage.userData.title }}</a>
-                    {{ 
-                        } 
-                    }}
+                    
+                        <a class="nav-item nav-link " href="home.html">Home</a>
+                    
+                        <a class="nav-item nav-link " href="blog.html">Blog</a>
+                    
+                        <a class="nav-item nav-link active" href="about.html">About</a>
+                    
                     </div>
                 </div>
             </nav>
         </header>
 
-        <div>{{=it.$content}}</div>
+        <div>
+
+
+
+<div class="jumbotron bg-primary">
+    <div class="container">
+        <h1 class="display-4">About</h1>
+        <p class="lead">Some Info about me</p>
+         
+    </div>
+</div>
+
+<div class="container">
+    <h1 id="about-page">About page</h1>
+<p>bla bla bla</p>
+
+</div></div>
 
         <footer class="bg-faded text-muted">
             <div class="container">
-                <strong>Copyright (c) {{= new Date().getFullYear() }} {{= it.$config.author }}</strong><br />       
+                <strong>Copyright (c) 2017 Alexander Klingenbeck</strong><br />       
             </div>
         </footer>
 
