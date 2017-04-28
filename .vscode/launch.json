@@ -12,7 +12,7 @@
             "outFiles": [ "${workspaceRoot}/lib/**/*.js" ],
             "preLaunchTask": "build",
             "args": [
-                "content"    
+                "page"    
             ],
             "cwd":"${workspaceRoot}"
         }

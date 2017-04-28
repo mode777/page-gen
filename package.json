@@ -9,12 +9,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/glob": "^5.0.30",
     "@types/marked": "0.0.28",
     "@types/node": "^7.0.13",
+    "@types/underscore": "^1.8.0",
     "typescript": "^2.2.2"
   },
   "dependencies": {
     "dot": "^1.1.1",
-    "marked": "^0.3.6"
+    "glob": "^7.1.1",
+    "marked": "^0.3.6",
+    "underscore": "^1.8.3"
   }
 }

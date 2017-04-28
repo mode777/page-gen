@@ -2,108 +2,124 @@ import * as fs from "fs";
 import * as path from "path";
 import * as doT from "dot";
 import * as marked from "marked";
+import * as util from "util";
+import * as _ from "underscore";
+import * as glob from "glob";
 
 doT.templateSettings.strip = false;
 
-let data = { anchor: "a" }
-let templ = doT.template(`
-{{## 
-    def.inject = "injected value"
-#}}
-<h1>{{=it.inject}}</h1>
-`, null, data);
+interface Config {
+    out: string;
+    layout: string;
+    content: string
+}
 
-let html = templ(data);
-
-
+const CONFIG_DEFAULT: Config = {
+    out: "out",
+    layout: "layout",
+    content: "content",
+}
 
 type template = (data: any) => string;
 
-interface Config {
-    $dir: string,
-    $pages: Page[],
-    $layouts: {[key: string]: Layout}
-    $date: Date
-}
-
-interface Layout {
-    $layout?: string;
-    $src: string;
-    $template?: template; 
-}
-
 interface Page {
-    $out?: string;
-    $src: string;
-    $layout?: string;
-    [key: string]: any;
+    rawContent?: string;
+    path?: string;
+    name?: string;
+    filename?: string;
+    ext?: string;
+    folder?: string;
+    template?: template;
+    userData?: any;
+    isMarkdown?: boolean;
+    layout?: Page; 
+    outPath?: string;
 }
 
-function loadTemplate(path: string): template{
-    const srcTemplate = fs.readFileSync(path, "utf-8");
-    return doT.template(srcTemplate);
-}
+async function main(){
 
-try {
+    // Set paths
+    const ROOT = process.argv[2] ? path.join(process.cwd(), process.argv[2]) : process.cwd(); 
+    const CONFIG = <Config>_.extend({}, CONFIG_DEFAULT, fs.existsSync(path.join(ROOT, "page.config.json")) ? JSON.parse(fs.readFileSync(path.join(ROOT, "page.config.json"), "utf8")) : {});
+    const CONTENT = path.join(ROOT, CONFIG.content);
+    const LAYOUT = path.join(ROOT, CONFIG.layout);
+    const OUT = path.join(ROOT, CONFIG.out);
 
-    const contentDir = path.join(process.cwd(), process.argv[2] || ".");
-    const configFile = process.argv[3] || "pages.json";
-
-    const config = <Config>JSON.parse(fs.readFileSync(path.join(contentDir, configFile), "utf8"))
-    config.$date = new Date();
-
-    for (var key in config.$layouts) {
-        const layout = config.$layouts[key];
-        const layoutPath = path.join(contentDir, layout.$src);
-        layout.$template = loadTemplate(layoutPath);
+    // Collect files
+    function collectFilesAsync(dir: string){
+        return new Promise<string[]>((res, rej) => {
+            glob(path.join(dir, "**/*.*"),(err, match) => {
+                if(err)
+                    rej(err);
+                else
+                    res(match);
+            });
+        });
     }
 
-    function renderLayout(layoutName: string, data: any){
-        const layout = config.$layouts[layoutName];
-        data["$content"] = layout.$template(data);
-     
-        if(layout.$layout)
-            return renderLayout(layout.$layout, data);
+    const CONTENT_FILES = await collectFilesAsync(CONTENT); 
+    const LAYOUT_FILES = await collectFilesAsync(LAYOUT); 
+
+    // Create page-templates
+    function createPage(filename: string): Page {
+        let page: Page = {
+            path: filename,
+            rawContent: fs.readFileSync(filename, "utf8"),
+            name: path.basename(filename).replace(/\.[^/.]+$/, ""),
+            filename: path.basename(filename),
+            folder: path.dirname(filename),
+            ext: path.extname(filename),
+            userData: {}
+        }
+
+        page.isMarkdown = page.ext.toLocaleUpperCase() == ".MD"; 
+        page.template = doT.template(page.rawContent, null, page.userData);
+        page.outPath = path.join(OUT, path.relative(page.folder, CONTENT), page.name + ".html");
+
+        return page;
+    }
+
+    const CONTENT_PAGES = <Page[]>CONTENT_FILES.map(createPage);
+    const LAYOUT_PAGES = <Page[]>LAYOUT_FILES.map(createPage);
+
+    // Build layout graph
+    const LAYOUTS_BY_NAME = {};
+    LAYOUT_PAGES.forEach(x => LAYOUTS_BY_NAME[x.filename] = x);
+
+    LAYOUT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.layout]);
+    CONTENT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.layout]);
+
+    function renderLayout(layout: Page, data: any, content: string){
+        data["$content"] = content;
+        let newContent = layout.template(data);
+
+        if(layout.layout)
+            return renderLayout(layout.layout, data, newContent);
         else
-            return data["$content"];
-    }
-    
-    const outDir = path.join(contentDir, config.$dir || "out");
-    if(!fs.existsSync(outDir)){
-        fs.mkdirSync(outDir);
+            return newContent;
     }
 
-    for(let page of config.$pages || []){
-        
-        let content: string;
-        let pageData = {
-            $page: page,
-            $site: config
+    for (let i = 0; i < CONTENT_PAGES.length; i++) {
+        var page = CONTENT_PAGES[i];
+        const TEMPLATE_DATA = {
+            $page: page.userData,
+            $layouts: LAYOUTS_BY_NAME,
+            $pages: CONTENT_PAGES,
+            $config: CONFIG
         };
         
-        const filePath = path.join(contentDir, page.$src);
-        const ext = path.extname(filePath);
+        let html = "";
+        if(page.template)
+            html = page.template(TEMPLATE_DATA);
 
-        let pageContent = loadTemplate(filePath)(pageData);
+        if(page.isMarkdown)
+            html = marked.parse(html);
 
-        if(ext.toUpperCase() == ".MD")
-            pageContent = marked.parse(pageContent);
+        if(page.layout)
+            html = renderLayout(page.layout, TEMPLATE_DATA, html);
 
-        if(page.$layout){
-            pageData["$content"] = pageContent;
-            const layoutContent = renderLayout(page.$layout, pageData); 
-            content = layoutContent;
-        }
-        else
-            content = pageContent;
-
-        const outPath = path.join(outDir, page.$out || page.$src);
-        fs.writeFileSync(outPath, content);
+        fs.writeFileSync(page.outPath, html);
     }
-    
-    console.log("All done!");
-}
-catch(e){
-    console.log("Generation failed");
-    console.log(e);
-}
+};
+
+main();
