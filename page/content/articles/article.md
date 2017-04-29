@@ -1,5 +1,5 @@
 {{##
-    def.layout = "article";
+    def.$layout = "article";
     def.disqusId = "TEST_01";
     def.title = "Article 01";
     def.lead = "This is a test article";

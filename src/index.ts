@@ -71,8 +71,8 @@ function main(){
 
         page.isMarkdown = page.ext.toLocaleUpperCase() == ".MD"; 
         page.template = doT.template(page.rawContent, null, page.userData);
-        page.outPath = path.join(OUT, path.relative(CONTENT, page.folder), page.name + ".html");
-        page.href = CONFIG.prefix + path.join(path.relative(CONTENT, page.folder), page.name + ".html");
+        page.outPath = path.join(path.relative(CONTENT, page.folder), page.name + ".html");
+        page.href = CONFIG.prefix + page.outPath;
 
         return page;
     }
@@ -84,8 +84,8 @@ function main(){
     const LAYOUTS_BY_NAME = {};
     LAYOUT_PAGES.forEach(x => LAYOUTS_BY_NAME[x.name] = x);
 
-    LAYOUT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.layout]);
-    CONTENT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.layout]);
+    LAYOUT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.$layout]);
+    CONTENT_PAGES.forEach(x => x.layout = LAYOUTS_BY_NAME[x.userData.$layout]);
 
     function renderLayout(layout: Page, data: any, content: string){
         data["$content"] = content;
@@ -125,9 +125,12 @@ function main(){
         console.log(page.path);
         const TEMPLATE_DATA = {
             $page: page,
+            $model: page.userData,
             $layouts: LAYOUTS_BY_NAME,
             $pages: CONTENT_PAGES,
-            $config: CONFIG
+            $config: CONFIG,
+            href: (rel: string) => CONFIG.prefix + rel,
+            asset: (rel: string) => CONFIG.prefix + path.join(CONFIG.assets, rel)
         };
         
         let html = "";
@@ -140,8 +143,9 @@ function main(){
         if(page.layout)
             html = renderLayout(page.layout, TEMPLATE_DATA, html);
 
-        mkdirp.sync(path.dirname(page.outPath));
-        fs.writeFileSync(page.outPath, html);
+        const filename = path.join(OUT, page.outPath);
+        mkdirp.sync(path.dirname(filename));
+        fs.writeFileSync(filename, html);
     }
     console.log("Done");
 };

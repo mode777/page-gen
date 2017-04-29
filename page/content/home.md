@@ -1,9 +1,9 @@
 {{##
-    def.layout = "layout";
+    def.$layout = "layout";
     def.title = "Home";
     def.menuOrder = 1;
  #}}
 
-# {{=it.$page.userData.title}}
+# {{=it.$model.title}}
 
 Tescontetn bla bla bla dlss f
