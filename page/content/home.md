@@ -1,6 +1,6 @@
 {{##
     def.$layout = "layout";
-    def.title = "Home";
+    def.menuTitle = "Home";
     def.menuOrder = 1;
  #}}
 

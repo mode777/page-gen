@@ -1,9 +1,14 @@
 {{##
-    def.$layout = "article";
-    def.title = "Blog";
     def.menuOrder = 2;
+    def.menuTitle = "Blog";
 #}}
 
-# Blog
-
-bla bla bla
+{{
+    var page = it.$pages
+        .filter(p => p.userData.date)
+        .sort((a,b) => b.userData.date - a.userData.date)[0];
+    
+    if(page){
+        it.subst(page); 
+    }
+}}
