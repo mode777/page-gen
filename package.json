@@ -1,8 +1,11 @@
 {
-  "name": "blog-gen",
-  "version": "1.0.0",
+  "name": "page-gen",
+  "version": "1.0.1",
   "description": "An extremely minimalistic static page generator",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "bin": {
+	"page-gen": "./lib/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
