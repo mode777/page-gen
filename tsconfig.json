@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "outDir": "lib",
+    "outDir": "js",
     "module": "commonjs",
     "declaration": true,
     "noImplicitAny": false,
-    "removeComments": true,
     "moduleResolution": "node",
     "inlineSourceMap": true
   },
   "typeRoots": ["node_modules/@types"]
-//   "include": [
-//     "src/**/*",
-//     "typings/**/*"
-//   ]
 }

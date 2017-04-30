@@ -9,6 +9,7 @@
         <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">-->
         <link rel="stylesheet" href="/assets/bootstrap.css">
         <link rel="stylesheet" href="/assets/octicons.min.css">
+        <link rel="stylesheet" href="/assets/highlight/agate.css">
         <link rel="stylesheet" href="/assets/styles.css">
     </head>
     <body>
@@ -41,20 +42,24 @@
 
 <div class="jumbotron bg-primary">
     <div class="container">
-        <h1 class="display-4">Article 01</h1>
-        <p class="lead">
-        <p class="lead" style="margin-bottom:5px;">This is a test article</p>
-        <div class="text-muted"><em>published 2017/4/28</em></div>
-        
-        <div>
-            <a href="/tags.html">Tags:</a>
-            
-            <a href="/tags.html#.NET" class="badge badge-success">.NET</a>
-            
-            <a href="/tags.html#C#" class="badge badge-success">C#</a>
-            
+        <div class="row">
+            <div class="col col-md-9">
+                <h1 class="display-4">Article 01</h1>
+                <p class="lead">
+                <p class="lead" style="margin-bottom:5px;">This is a test article</p>
+                <span class="article-date"><em>2017/4/28</em></span>
+                
+                <span>
+                    <a href="/tags.html">Tags:</a>
+                    
+                    <a href="/tags.html#.NET" class="badge badge-success">.NET</a>
+                    
+                    <a href="/tags.html#C#" class="badge badge-success">C#</a>
+                    
+                </span>
+                
+            </div>
         </div>
-        
     </div>
 </div>
 
@@ -86,16 +91,16 @@
 <pre><code class="lang-cs">services.AddIdentity&lt;ApplicationUser, IdentityRole&gt;()
 </code></pre>
 <p>...under the hood identity registers all dependencies for you. This is a excerpt from this method&#39;s implemenentation <a href="https://github.com/aspnet/Identity/blob/dev/src/Microsoft.AspNetCore.Identity/IdentityServiceCollectionExtensions.cs">source</a>:</p>
-<pre><code class="lang-cs">using System;
+<pre><code class="lang-cs"><span class="hljs-keyword">using</span> System;
 
-#pragma warning disable 414, 3021
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span> disable 414, 3021</span>
 
-/// &lt;summary&gt;Main task&lt;/summary&gt;
-async Task&lt;int, int&gt; AccessTheWebAsync()
-{
-    Console.WriteLine(&quot;Hello, World!&quot;);
-    string urlContents = await getStringTask;
-    return urlContents.Length;
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span>Main task<span class="hljs-doctag">&lt;/summary&gt;</span></span>
+<span class="hljs-function"><span class="hljs-keyword">async</span> Task&lt;<span class="hljs-keyword">int</span>, <span class="hljs-keyword">int</span>&gt; <span class="hljs-title">AccessTheWebAsync</span>(<span class="hljs-params"></span>)
+</span>{
+    Console.WriteLine(<span class="hljs-string">"Hello, World!"</span>);
+    <span class="hljs-keyword">string</span> urlContents = <span class="hljs-keyword">await</span> getStringTask;
+    <span class="hljs-keyword">return</span> urlContents.Length;
 }
 </code></pre>
 <p>As you can see there are different classes, each responsible for another aspect of the identity functions. Most of them are provided as interfaces. This means we can implement them ourselves - yay!
@@ -103,7 +108,21 @@ We don&#39;t want to reimplement all of them tough</p>
 
         </div>
         <div class="col col-md-3">
-            Sidebar
+
+            <h6 class="text-uppercase">recent articles</h6>
+            
+            <div><a href="/articles/page-gen.html">How I stopped overengineering and got things done</a></div>
+            
+            <div><a href="/articles/article.html">Article 01</a></div>
+            
+            <div><a href="/articles/article2.html">Article 02</a></div>
+            
+
+            <h6 class="text-uppercase">meta</h6>
+            <div><a href="http://stackoverflow.com/users/4361832/mode777?tab=profile">Stack Overflow</a></div>
+            <div><a href="https://github.com/mode777">GitHub</a></div>
+            <div><a href="https://www.linkedin.com/in/alexander-klingenbeck-b51100141/">LinkedIn</a></div>
+            <div><a href="https://www.xing.com/profile/Alexander_Klingenbeck2/cv">Xing</a></div>
         </div>
     </div>
 </div>

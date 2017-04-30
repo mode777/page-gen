@@ -6,6 +6,8 @@ import * as util from "util";
 import * as _ from "underscore";
 import * as glob from "glob";
 import * as mkdirp from "mkdirp";
+import * as hljs from "highlight.js";
+import * as fsx from "fs-extra";
 
 doT.templateSettings.strip = false;
 
@@ -117,10 +119,22 @@ function main(){
     ASSET_FILES.forEach(inputPath => {
         let targetPath = path.join(OUT, path.relative(ROOT, inputPath));
         mkdirp.sync(path.dirname(targetPath));
-        fs.createReadStream(inputPath).pipe(fs.createWriteStream(targetPath));
+        fsx.copySync(inputPath, targetPath);        
     });
 
     // render pages
+    marked.setOptions({
+        highlight: (code, lang) => {
+            let res: any;
+            if (!lang)
+                res = hljs.highlightAuto(code).value;
+            else
+                res = hljs.highlight(lang, code).value;
+
+            return res;
+        }
+    });
+
     function renderPage(page: Page){
         let subst = null;
         let abort = null;
@@ -180,6 +194,7 @@ function main(){
         }
     }
     console.log("Done");
+    process.exit();
 };
 
 main();

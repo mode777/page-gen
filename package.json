@@ -1,14 +1,15 @@
 {
   "name": "blog-gen",
   "version": "1.0.0",
-  "description": "",
+  "description": "An extremely minimalistic static page generator",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Alexander Klingenbeck <alexander.klingenbeck@gmx.de> (http://www.alexklingenbeck.de)",
+  "license": "MIT",
   "devDependencies": {
+    "@types/fs-extra": "^2.1.0",
     "@types/glob": "^5.0.30",
     "@types/marked": "0.0.28",
     "@types/mkdirp": "^0.3.29",
@@ -18,7 +19,9 @@
   },
   "dependencies": {
     "dot": "^1.1.1",
+    "fs-extra": "^3.0.0",
     "glob": "^7.1.1",
+    "highlight.js": "^9.11.0",
     "marked": "^0.3.6",
     "mkdirp": "^0.5.1",
     "underscore": "^1.8.3"
