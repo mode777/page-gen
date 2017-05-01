@@ -8,6 +8,7 @@ import * as glob from "glob";
 import * as mkdirp from "mkdirp";
 import * as hljs from "highlight.js";
 import * as fsx from "fs-extra";
+import * as chokidar from "chokidar";
 
 doT.templateSettings.strip = false;
 
@@ -44,17 +45,47 @@ interface Page {
     href?: string;
 }
 
-function main(){
+const ROOT = (process.argv[2] ? path.join(process.cwd(), process.argv[2]) : process.cwd()); 
+const WATCH = process.argv[3] == "-w" || process.argv[3] == "--watch"; 
 
-    // set paths
-    const ROOT = (process.argv[2] ? path.join(process.cwd(), process.argv[2]) : process.cwd()); 
+const CONFIG = <Config>_.extend({}, CONFIG_DEFAULT, fs.existsSync(path.join(ROOT, "page.config.json")) ? JSON.parse(fs.readFileSync(path.join(ROOT, "page.config.json"), "utf8")) : {});
+
+// set paths
+const CONTENT = path.join(ROOT, CONFIG.content);
+const LAYOUT = path.join(ROOT, CONFIG.layout);
+const OUT = path.join(ROOT, CONFIG.out);
+const ASSETS = path.join(ROOT, CONFIG.assets);
+
+
+if(WATCH){
+    if(path.relative(ROOT, OUT)[0] != ".")
+        throw "Watch mode is not supported if out directory is within root. Try to configure the 'out' options in page.config.json";
+
+    let build = false;
+    let watcher = chokidar.watch(ROOT, { persistent: true});
     
-    const CONFIG = <Config>_.extend({}, CONFIG_DEFAULT, fs.existsSync(path.join(ROOT, "page.config.json")) ? JSON.parse(fs.readFileSync(path.join(ROOT, "page.config.json"), "utf8")) : {});
-    
-    const CONTENT = path.join(ROOT, CONFIG.content);
-    const LAYOUT = path.join(ROOT, CONFIG.layout);
-    const OUT = path.join(ROOT, CONFIG.out);
-    const ASSETS = path.join(ROOT, CONFIG.assets);
+    let callback = (f) => {
+        build = true;
+        setTimeout(() => {
+            if(build){
+                console.log("Rebuilding... "+ new Date())
+                main(ROOT, CONTENT, LAYOUT, ASSETS, OUT, CONFIG, WATCH);
+                build = false;
+            }
+        }, 1000)
+    }
+
+    watcher
+    .on('add', callback)
+    .on('change', callback)
+    .on('unlink', callback)
+    .on('error', callback);
+}
+else {
+    main(ROOT, CONTENT, LAYOUT, ASSETS, OUT, CONFIG, WATCH);
+}
+
+function main(ROOT: string, CONTENT: string, LAYOUT: string, ASSETS: string, OUT: string, CONFIG: Config, isWatching: boolean){   
 
     // collect files
     const CONTENT_FILES = glob.sync(path.join(CONTENT, "**/*.*")); 
@@ -102,18 +133,20 @@ function main(){
     }
 
     // clear output folder
-    function clearDir(inputPath: string, keepFolder = false){
-        fs.readdirSync(inputPath).forEach((fileOrFolder) => {
-        var filePath = path.join(inputPath, fileOrFolder);
-          if (fs.statSync(filePath).isFile())
-            fs.unlinkSync(filePath);
-          else
-            clearDir(filePath);
-        });
-        if(!keepFolder)
-            fs.rmdirSync(inputPath);
+    if(fs.existsSync(OUT)){
+        function clearDir(inputPath: string, keepFolder = false){
+            fs.readdirSync(inputPath).forEach((fileOrFolder) => {
+            var filePath = path.join(inputPath, fileOrFolder);
+            if (fs.statSync(filePath).isFile())
+                fs.unlinkSync(filePath);
+            else
+                clearDir(filePath);
+            });
+            if(!keepFolder)
+                fs.rmdirSync(inputPath);
+        }
+        clearDir(OUT, true);    
     }
-    clearDir(OUT, true);    
     
     // copy assets
     ASSET_FILES.forEach(inputPath => {
@@ -194,7 +227,9 @@ function main(){
         }
     }
     console.log("Done");
-    process.exit();
+
+    if(!isWatching)
+        process.exit();
 };
 
-main();
+
