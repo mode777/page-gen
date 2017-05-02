@@ -9,6 +9,7 @@ import * as mkdirp from "mkdirp";
 import * as hljs from "highlight.js";
 import * as fsx from "fs-extra";
 import * as chokidar from "chokidar";
+import * as program from "commander";
 
 doT.templateSettings.strip = false;
 
@@ -45,8 +46,16 @@ interface Page {
     href?: string;
 }
 
-const ROOT = (process.argv[2] ? path.join(process.cwd(), process.argv[2]) : process.cwd()); 
-const WATCH = process.argv[3] == "-w" || process.argv[3] == "--watch"; 
+let cli = program
+  .version('1.1.1')
+  .command("page-gen")
+  .description("Creates a new website for given directory or working directory")
+  .arguments("[root]")
+  .option('-w, --watch', 'watch mode')
+  .parse(process.argv);
+
+const ROOT = (cli.args[0] ? path.join(process.cwd(), cli.args[0]) : process.cwd()); 
+const WATCH = cli["watch"]; 
 
 const CONFIG = <Config>_.extend({}, CONFIG_DEFAULT, fs.existsSync(path.join(ROOT, "page.config.json")) ? JSON.parse(fs.readFileSync(path.join(ROOT, "page.config.json"), "utf8")) : {});
 
