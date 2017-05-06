@@ -1,6 +1,6 @@
 {
   "name": "page-gen",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "An extremely minimalistic static page generator",
   "main": "./js/index.js",
   "preferGlobal": true,
