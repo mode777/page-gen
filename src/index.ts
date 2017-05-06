@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as fs from "fs";
 import * as path from "path";
 import * as doT from "dot";
@@ -77,8 +79,14 @@ if(WATCH){
         build = true;
         setTimeout(() => {
             if(build){
-                console.log("Rebuilding... "+ new Date())
-                main(ROOT, CONTENT, LAYOUT, ASSETS, OUT, CONFIG, WATCH);
+                try {
+                    console.log("Rebuilding... "+ new Date())
+                    main(ROOT, CONTENT, LAYOUT, ASSETS, OUT, CONFIG, WATCH);
+                }
+                catch(e){
+                    console.error(e)
+                    console.error("Build not successfull");
+                }
                 build = false;
             }
         }, 1000)
@@ -159,7 +167,12 @@ function main(ROOT: string, CONTENT: string, LAYOUT: string, ASSETS: string, OUT
     
     // copy assets
     ASSET_FILES.forEach(inputPath => {
-        let targetPath = path.join(OUT, path.relative(ROOT, inputPath));
+        let targetPath: string;
+        if(path.basename(inputPath).toLowerCase() === "favicon.ico")
+            targetPath = path.join(OUT, path.basename(inputPath));
+        else
+            targetPath = path.join(OUT, path.relative(ROOT, inputPath));
+        
         mkdirp.sync(path.dirname(targetPath));
         fsx.copySync(inputPath, targetPath);        
     });
