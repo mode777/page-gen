@@ -49,11 +49,11 @@ interface Page {
 }
 
 let cli = program
-  .version('1.1.1')
   .command("page-gen")
   .description("Creates a new website for given directory or working directory")
   .arguments("[root]")
   .option('-w, --watch', 'watch mode')
+  .version('1.1.9')
   .parse(process.argv);
 
 const ROOT = (cli.args[0] ? path.join(process.cwd(), cli.args[0]) : process.cwd()); 
@@ -122,8 +122,10 @@ function main(ROOT: string, CONTENT: string, LAYOUT: string, ASSETS: string, OUT
         }
 
         page.isMarkdown = page.ext.toLocaleUpperCase() == ".MD"; 
+        if(page.isMarkdown)
+            page.ext = ".html";
         page.template = doT.template(page.rawContent, null, page.userData);
-        page.outPath = path.join(path.relative(CONTENT, page.folder), page.name + ".html");
+        page.outPath = path.join(path.relative(CONTENT, page.folder), page.name + page.ext);
         page.href = CONFIG.prefix + page.outPath;
 
         return page;
